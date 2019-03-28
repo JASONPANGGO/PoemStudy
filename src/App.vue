@@ -19,15 +19,16 @@ export default {
 </script>
 
 <style>
-
-@font-face {
-  font-family: "华文宋体";
-  src: url("/assets/STSONG.TTF");
-}
 @font-face {
   font-family: "宋体";
-  src: url("assets/simsun.ttc");
+  src: url("./assets/simsun.ttc");
 }
+
+@font-face {
+  font-family: "繁体";
+  src:url("./assets/FZQTFW.TTF");
+}
+
 #app {
   font-family: "宋体";
   width: 100vw;
@@ -46,6 +47,7 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
 a {
   text-decoration: none;
   color: black;

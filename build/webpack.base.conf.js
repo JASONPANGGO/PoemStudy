@@ -58,7 +58,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(woff2?|eot|ttf|otf|ttc)(\?.*)?$/,
+        test: /\.(woff2?|eot|ttf|otf|ttc|TTF)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,

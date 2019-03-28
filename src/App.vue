@@ -19,13 +19,14 @@ export default {
 </script>
 
 <style>
+
 @font-face {
   font-family: "华文宋体";
   src: url("/assets/STSONG.TTF");
 }
 @font-face {
   font-family: "宋体";
-  src: url("/assets/simsun.ttc");
+  src: url("assets/simsun.ttc");
 }
 #app {
   font-family: "宋体";

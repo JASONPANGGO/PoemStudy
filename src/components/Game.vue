@@ -1,9 +1,28 @@
 <template>
-  <div>
+  <div class="gameContainer">
+    <div class="gameOver animated" v-if="gameOver" :class="{'fadeIn':gameOver}">
+      <div class="gameOverBG animated" :class="{'zoomIn':gameOver}"></div>
+      <div class="gameOverBoard animated" :class="{'zoomIn':gameOver}">
+        <div class="title">游戏结束</div>
+        <div class="scoreReport">你的得分：{{score}}</div>
+        <button @click="restart">重新开始</button>
+      </div>
+    </div>
     <div class="gameBoard">
-      <div class="gameBar"></div>
+      <div class="gameBar">
+        <span class="title">{{list[num].title}}</span>
+        <div class="time">
+          <img src="../assets/time.png" alt>
+          <span class="barDigit">{{time}}</span>
+        </div>
+        <div class="score">
+          <span class="barDigit">{{score}}</span>
+          <img src="../assets/coins.png" alt>
+        </div>
+      </div>
       <div class="gameImg" :class="{gameWin: win}">
         <img :src="list[num].img">
+        <!-- <img src="/static/img/yeyujibei.b4630aa.jpg"> -->
       </div>
 
       <div class="gameMain">
@@ -32,6 +51,12 @@
 </template>
 
 <script>
+import jingyesi from '../assets/jingyesi.jpg'
+import chunxiao from '../assets/chunxiao.jpg'
+import yeyujibei from '../assets/yeyujibei.jpg'
+var TIMESET = 10;
+var SELECTSIZE = 10;
+var timer;
 export default {
   name: "Game",
   data() {
@@ -39,33 +64,52 @@ export default {
       num: 0,
       list: [
         {
+          title: "静夜思",
           question: "床前明月光",
           answer: "疑是地上霜",
-          img: "/static/img/jingyesi.8eaffbd.jpg"
+          img: jingyesi
         },
         {
+          title: "春晓",
           question: "春眠不觉晓",
           answer: "处处闻啼鸟",
-          img: "/static/img/chunxiao.157b8f4.jpg"
+          img: chunxiao
+        },
+        {
+          title: "夜雨寄北",
+          question: "君问归期未有期",
+          answer: "巴山夜雨涨秋池",
+          img: yeyujibei
         }
       ],
       selectRange: [],
       input: [],
       win: false,
       inputNum: 0,
-      imgUrl: "../assets/jingyesi.jpg"
+      imgUrl: "../assets/yeyujibei.jpg",
+      time: TIMESET,
+      score: 0,
+      gameOver: false
     };
   },
   methods: {
-    checkInput() {
+    checkInput(e = true) {
       if (this.input.join("") == this.list[this.num].answer) {
         this.win = true;
+        clearInterval(timer);
         this.inputNum = 0;
+        if (e) {
+          this.score += 10;
+        }
         setTimeout(() => {
-          if (this.num < this.list.length-1) {
+          if (this.num < this.list.length - 1) {
             this.num++;
             this.randomSelect();
+            this.time = TIMESET;
+            this.timeSet();
             this.win = false;
+          } else {
+            this.gameOver = true;
           }
         }, 1000);
       }
@@ -80,8 +124,8 @@ export default {
         }
       }
       let question = this.list[this.num].question.split("");
-      range = answer;
-      for (let i = 0; i < question.length; i++) {
+      range = answer.concat();
+      for (let i = 0; i < SELECTSIZE - answer.length; i++) {
         range.push(question[i]);
       }
       // 打乱选项，洗牌算法
@@ -116,7 +160,7 @@ export default {
         this.input.splice(i, i + 1, "");
       }
       // }
-      console.log(this.input);
+      this.inputNum = 0;
       this.randomSelect(false);
       this.win = false;
     },
@@ -129,24 +173,44 @@ export default {
           this.selectRange.splice(i, 1, "selected");
         }
       }
-      //   this.selectRange.forEach(word=>{
-      //       if(word == answer[this.inputNum]){
-      //           console.log(word);
-      //           word = 'selected';
-      //           this.selectRange
-      //       }
-      //   })
       this.inputNum++;
-      this.checkInput();
+      this.checkInput(false);
+      this.score -= 2;
+    },
+    timeSet() {
+      timer = setInterval(() => {
+        if (this.time > 0) {
+          this.time--;
+        } else {
+          this.gameOver = true;
+        }
+      }, 1000);
+    },
+    restart() {
+      this.num = 0;
+      this.win = false;
+      this.randomSelect();
+      this.time = TIMESET;
+      clearInterval(timer);
+      this.timeSet();
+      this.score = 0;
+      this.gameOver = false;
     }
   },
   mounted: function() {
     this.randomSelect();
+    this.timeSet();
   }
 };
 </script>
 
 <style>
+@import url(../assets/animate.css);
+.gameContainer {
+  background: url(../assets/pattern4.png) repeat;
+  background-size: 100%;
+  height: 100vh;
+}
 .gameBoard {
   margin-top: 8vh;
   height: 70vh;
@@ -155,7 +219,37 @@ export default {
   width: 100%;
   height: 6vh;
   background-color: rgba(0, 0, 0, 0.06);
+  text-align: center;
+  /* display: flex; */
   /* box-shadow: 0px 5px 10px #999999; */
+}
+.gameBar .title {
+  line-height: 6vh;
+  font-weight: bold;
+}
+.time,
+.score {
+  width: 20vw;
+  height: 6vh;
+  line-height: 6vh;
+  text-align: center;
+}
+.time {
+  float: left;
+}
+.score {
+  align-self: flex-end;
+  float: right;
+}
+.barDigit {
+  font-family: sans-serif;
+  /* margin-left: 10px; */
+  /* margin-right: 10px; */
+  color: rgb(0, 106, 82);
+}
+.time img,
+.score img {
+  height: 1em;
 }
 .gameImg {
   margin: 10px;
@@ -231,11 +325,63 @@ export default {
   color: white;
   font-family: "宋体";
   letter-spacing: 3px;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5); */
+}
+.gameOperation input:active {
+  background-color: rgb(0, 139, 107);
 }
 .disappear {
   /* opacity: 0; */
   /* display: hidden; */
   visibility: hidden;
+}
+.gameOver {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gameOver .gameOverBoard,
+.gameOver .gameOverBG {
+  position: fixed;
+  background-color: white;
+  width: 70vw;
+  height: 60vh;
+  border-radius: 20px;
+  border: 2px solid rgb(0, 106, 82);
+  /* box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.8); */
+}
+.gameOver .gameOverBoard {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+.gameOver .gameOverBoard .title {
+  font-size: 25px;
+  color: rgb(0, 106, 82);
+  font-weight: bold;
+  margin-top: 6vh;
+}
+.gameOver .gameOverBoard .scoreReport {
+  margin-top: 3vh;
+}
+.gameOver .gameOverBoard {
+  background: url(../assets/pattern4.png) repeat;
+  background-size: 100%;
+}
+
+.gameOver .gameOverBoard button {
+  margin-top: 30vh;
+  width: 100px;
+  height: 30px;
+  border: none;
+  background-color: rgb(0, 106, 82);
+  border-radius: 15px;
+  color: white;
 }
 </style>

@@ -38,15 +38,12 @@
       >
         <div class="title">{{poems[num].title}}</div>
         <div class="writer">{{poems[num].writer}}</div>
-        <div class="content" v-html="poems[num].comments">
-        </div>
+        <div class="content" v-html="poems[num].comments"></div>
         <br>
         <br>
         <br>
         <br>
-        <div class="content-comment" v-html="poems[num].comments2">
-         
-        </div>
+        <div class="content-comment" v-html="poems[num].comments2"></div>
       </div>
 
       <div
@@ -73,7 +70,7 @@
         <div class="finish">
           <!-- <div class="finishDo"> -->
           <button :class="{'finished': poems[num].finishState}" @click="clickFinish">完成学习</button>
-          <div class="catalogue"  @click="openList(true)">
+          <div class="catalogue" @click="openList(true)">
             <img src="../assets/menu.png" alt>
           </div>
           <!-- </div> -->
@@ -88,7 +85,12 @@
             <i class="fa fa-close fa-lg"></i>
           </span>
         </div>
-        <div class="poemItem" v-for="(item, index) in poems" :key="index" @click="selectPoem(index)">
+        <div
+          class="poemItem"
+          v-for="(item, index) in poems"
+          :key="index"
+          @click="selectPoem(index)"
+        >
           <div class="poemInfo">
             <div class="poemTitle">{{item.title}}</div>
             <div class="poemWriter">{{item.writer}}</div>
@@ -103,10 +105,10 @@
 </template>
 
 <script>
-import libai from '../assets/libai.jpg'
-import jingyesi from '../assets/jingyesi.jpg'
-import menghaoran from '../assets/menghaoran.jpg'
-import chunxiao from '../assets/chunxiao.jpg'
+import libai from "../assets/libai.jpg";
+import jingyesi from "../assets/jingyesi.jpg";
+import menghaoran from "../assets/menghaoran.jpg";
+import chunxiao from "../assets/chunxiao.jpg";
 var studyItemHeight = window.innerHeight * 0.9;
 var longtaptime;
 export default {
@@ -115,9 +117,9 @@ export default {
     return {
       poems: [
         {
-          finishState:false,
+          finishState: false,
           title: "静夜思",
-          img:jingyesi,
+          img: jingyesi,
           writer: "李白",
           writerImg: libai,
           writerDynasty: "唐",
@@ -126,24 +128,26 @@ export default {
             "李白（701年－762年） ，字太白，号青莲居士，又号“谪仙人”，是唐代伟大的浪漫主义诗人，被后人誉为“诗仙”，与杜甫并称为“李杜”，为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”。据《新唐书》记载，李白为兴圣皇帝（凉武昭王李暠）九世孙，与李唐诸王同宗。其人爽朗大方，爱饮酒作诗，喜交友。",
           comments:
             "<span class='green'>床</span>前明月光，<br>明亮的月光洒在床前的窗户纸上，<br><span class='green'>疑</span>是地上霜。<br>好像地上泛起了一层霜。<br>举头望明月，<br>我禁不住抬起头来，<br>看那天窗外空中的一轮明月，<br>低头思故乡。<br>不由得低头沉思，<br>想起远方的家乡。",
-          comments2:" （1）<b>静夜思</b>：安静的夜晚产生的思绪。<br>（2）<b>床</b>：此诗中的“床”字，是争论和异议的焦点。<br>（3）<b>疑</b>：好像。",
+          comments2:
+            " （1）<b>静夜思</b>：安静的夜晚产生的思绪。<br>（2）<b>床</b>：此诗中的“床”字，是争论和异议的焦点。<br>（3）<b>疑</b>：好像。",
           appreciation:
             "<p>这首诗写的是在寂静的月夜思念家乡的感受。</p><p>诗的前两句，是写诗人在作客他乡的特定环境中一刹那间所产生的错觉。</p><p>一个独处他乡的人，白天奔波忙碌，倒还能冲淡离愁，然而一到夜深人静的时候，心头就难免泛起阵阵思念故乡的波澜。</p><p>何况是在月明之夜，更何况是月色如霜的秋夜。</p><p>“疑是地上霜”中的“疑”字，生动地表达了诗人睡梦初醒，迷离恍惚中将照射在床前的清冷月光误作铺在地面的浓霜。</p><p>而“霜”字用得更妙，既形容了月光的皎洁，又表达了季节的寒冷，还烘托出诗人飘泊他乡的孤寂凄凉之情。</p><p>诗的后两句，则是通过动作神态的刻画，深化思乡之情。</p><p>“望”字照应了前句的“疑”字，表明诗人已从迷朦转为清醒，他翘首凝望着月亮，不禁想起，此刻他的故乡也正处在这轮明月的照耀下。</p>"
         },
         {
           finishState: false,
-          title: '春晓',
-          img:chunxiao,
-          writer:'孟浩然',
-          writerImg:menghaoran,
-          writerDynasty:'唐',
-          content:'春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。',
-          writerStory:'孟浩然生当盛唐，早年有志用世，在仕途困顿、痛苦失望后，尚能自重，不媚俗世，修道归隐终身。曾隐居鹿门山。40岁时，游长安，应进士举不第。曾在太学赋诗，名动公卿，一座倾服，为之搁笔。开元二十五年（737）张九龄招致幕府，后隐居。孟诗绝大部分为五言短篇，多写山水田园和隐居的逸兴以及羁旅行役的心情。其中虽不无愤世嫉俗之词，而更多属于诗人的自我表现。',
+          title: "春晓",
+          img: chunxiao,
+          writer: "孟浩然",
+          writerImg: menghaoran,
+          writerDynasty: "唐",
+          content: "春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。",
+          writerStory:
+            "孟浩然生当盛唐，早年有志用世，在仕途困顿、痛苦失望后，尚能自重，不媚俗世，修道归隐终身。曾隐居鹿门山。40岁时，游长安，应进士举不第。曾在太学赋诗，名动公卿，一座倾服，为之搁笔。开元二十五年（737）张九龄招致幕府，后隐居。孟诗绝大部分为五言短篇，多写山水田园和隐居的逸兴以及羁旅行役的心情。其中虽不无愤世嫉俗之词，而更多属于诗人的自我表现。"
         },
         {
-          finishState:false,
-          title:'夜雨寄北',
-          writer:'李商隐'
+          finishState: false,
+          title: "夜雨寄北",
+          writer: "李商隐"
         }
       ],
       num: 0,
@@ -156,11 +160,11 @@ export default {
   },
   methods: {
     checkscroll() {
-      var startY, endY;
-      var direction;
-      var distance;
+      let startY, endY;
+      let direction;
+      let distance;
 
-      var that = this;
+      let that = this;
       window.addEventListener(
         "touchstart",
         function(e) {
@@ -234,10 +238,10 @@ export default {
     clickFinish() {
       this.poems[this.num].finishState = true;
     },
-    openList(e){
+    openList(e) {
       this.studyList = e;
     },
-    selectPoem(index){
+    selectPoem(index) {
       this.num = index;
     }
   }
@@ -282,11 +286,20 @@ export default {
   background-color: rgba(0, 0, 0, 0.02);
   background: url(../assets/pattern4.png) repeat;
   background-size: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 隐藏滚动条 */
 .container::-webkit-scrollbar {
   width: 0 !important;
+  display: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0 !important;
+  display: none;
 }
 
 .headimg img {
@@ -455,7 +468,7 @@ export default {
   box-shadow: 0 10px 70px rgba(0, 0, 0, 0.3);
   background-color: white;
 }
-.studyListBG{
+.studyListBG {
   background-color: rgba(0, 0, 0, 0.07);
   height: 100%;
   border-radius: 5px;
@@ -514,7 +527,7 @@ export default {
   margin-top: 4vh;
   color: rgba(0, 0, 0, 0.2);
 }
-.finishedLogo{
+.finishedLogo {
   color: rgb(0, 106, 82);
 }
 </style>

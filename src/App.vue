@@ -2,9 +2,9 @@
   <div id="app">
     <headBar></headBar>
     <!-- <transition name="fade"> -->
-      <!-- <keep-alive> -->
-      <router-view class="routerview"/>
-      <!-- </keep-alive> -->
+    <!-- <keep-alive> -->
+    <router-view class="routerview"/>
+    <!-- </keep-alive> -->
     <!-- </transition> -->
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
 
 @font-face {
   font-family: "繁体";
-  src:url("./assets/FZQTFW.TTF");
+  src: url("./assets/FZQTFW.TTF");
 }
 
 #app {
@@ -35,9 +35,32 @@ export default {
   height: 100vh;
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* padding-right: 20px; */
+  /* overflow-x: hidden; */
+  /* overflow-y: scroll; */
+ 
+  
 }
-*:focus{
+
+#app::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0;
+   display: none;
+   
+}
+
+html::-webkit-scrollbar {
+  width: 0 !important;
+   display: none;
+}
+
+.routerview{
+  padding-right: -20px;
+  overflow-x: hidden;
+}
+
+*:focus {
   outline: none;
 }
 body {
@@ -57,12 +80,11 @@ a {
   scroll-behavior: initial;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-
-
 </style>

@@ -1,37 +1,144 @@
 <template>
   <div>
     <div class="dailyContainer">
-      <div class="dailyBG animated rotateInDownLeft myanimated">
+      <div
+        class="dailyBG animated rotateInDownLeft myanimated"
+        v-for="(item, index) in dailyPoem"
+        :key="index"
+        :class="{rotateOutUpLeft: dailyPoem[index].leftOut, rotateOutUpRight: dailyPoem[index].rightOut}"
+      >
         <div class="dailyCard">
           <div class="dailyContent">
             <!-- <img class="stampBig" :src="stamp"> -->
-            <div class="stampBig">{{dailyPoem.title}}</div>
-            <div class="dailyPoem" v-html="dailyPoem.poem"></div>
+            <div
+              class="stampBig"
+              :style="{height: dailyPoem[index].stampHeight}"
+            >{{dailyPoem[index].title}}</div>
+            <div class="dailyPoem" v-html="dailyPoem[index].poem"></div>
           </div>
           <div class="dailyWriter">
-            <div class="writerName">{{dailyPoem.writer}}</div>
-            <div class="stampSmall">{{dailyPoem.dynasty}}</div>
+            <div class="writerName">{{dailyPoem[index].writer}}</div>
+            <div class="stampSmall">{{dailyPoem[index].dynasty}}</div>
           </div>
         </div>
       </div>
+      <div class="msg" v-if="promptNoPoem">- 没有更多的诗词了 -</div>
     </div>
   </div>
 </template>
 
 <script>
 import stamp from "../assets/stamp.png";
+let prompting = false;
 export default {
   name: "Daily",
   data() {
     return {
       stamp: stamp,
-      dailyPoem: {
-        title: "如梦令",
-        poem: "还睡，<br>还睡，<br>解道醒来无味。",
-        writer: "纳兰性德",
-        dynasty: "清"
-      }
+      dailyPoem: [
+        {
+          title: "如梦令",
+          stampHeight: "120px",
+          poem: "还睡，<br>还睡，<br>解道醒来无味。",
+          writer: "纳兰性德",
+          dynasty: "清",
+          leftOut: false,
+          rightOut: false
+        },
+        {
+          title: "卜算子",
+          stampHeight: "120px",
+          poem:
+            "无意苦争春，<br>一任群芳妒。<br>零落成泥碾作尘，<br>只有香如故。",
+          writer: "陆游",
+          dynasty: "宋",
+          leftOut: false,
+          rightOut: false
+        },
+        {
+          title: "离骚",
+          stampHeight: "120px",
+          poem: "路漫漫其修远兮，<br>吾将上下而求索。",
+          writer: "屈原",
+          dynasty: "战",
+          leftOut: false,
+          rightOut: false
+        },
+        {
+          title: "春怨",
+          stampHeight: "120px",
+          poem: "寂寞空庭春欲晚，<br>梨花满地不开门。",
+          writer: "刘方平",
+          dynasty: "唐",
+          leftOut: false,
+          rightOut: false
+        },
+        {
+          title: "望月怀远",
+          stampHeight: "120px",
+          poem: "海上生明月，<br>天涯共此时。",
+          writer: "张九龄",
+          dynasty: "唐",
+          leftOut: false,
+          rightOut: false
+        }
+      ],
+      nowPoem: 4,
+      promptNoPoem: false
     };
+  },
+  mounted: function() {
+    this.swipeToNext();
+    // this.nowPoem = this.dailyPoem.length;
+    // console.log(this.nowPoem)
+  },
+  methods: {
+    swipeToNext(nowPoem) {
+      let startX, endX;
+      let direction;
+      let distance;
+      nowPoem = this.nowPoem;
+
+      window.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+      });
+      window.addEventListener(
+        "touchmove",
+        e => {
+          e.preventDefault();
+          endX = e.touches[0].clientX;
+          distance = endX - startX;
+        },
+        { passive: false }
+      );
+      window.addEventListener("touchend", () => {
+        if (distance > 5) {
+          console.log("右");
+          if (nowPoem > 0) {
+            this.dailyPoem[nowPoem].rightOut = true;
+            nowPoem--;
+          } else {
+            this.noPoemMsg();
+          }
+        } else if (distance < -5) {
+          console.log("左");
+          if (nowPoem > 0) {
+            this.dailyPoem[nowPoem].leftOut = true;
+            nowPoem--;
+          } else {
+            this.noPoemMsg();
+          }
+        }
+      });
+      //  this.dailyPoem[index].display = false;
+      //  this.dailyPoem[index-1].display = true;
+    },
+    noPoemMsg() {
+      this.promptNoPoem = true;
+      setTimeout(() => {
+        this.promptNoPoem = false;
+      }, 2999);
+    }
   }
 };
 </script>
@@ -42,11 +149,15 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .dailyBG {
+  position: fixed;
+  width: 80vw;
+  height: 70vh;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 15vh;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.2);
@@ -102,6 +213,7 @@ export default {
   font-family: "繁体";
   width: 40px;
   height: 80px;
+  text-align: end;
   line-height: 40px;
   writing-mode: vertical-lr;
   margin-left: 5px;
@@ -120,7 +232,29 @@ export default {
   margin-bottom: 10px;
 }
 
-.myanimated{
-    /* animation-duration: 1.5s !important; */
+.msg {
+  position: fixed;
+  width: 120px;
+  font-size: 12px;
+  color: gray;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  animation: prompt 3s;
+}
+@keyframes prompt {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import jingyesi from '../assets/jingyesi.jpg'
-import chunxiao from '../assets/chunxiao.jpg'
-import yeyujibei from '../assets/yeyujibei.jpg'
+import jingyesi from "../assets/jingyesi.jpg";
+import chunxiao from "../assets/chunxiao.jpg";
+import yeyujibei from "../assets/yeyujibei.jpg";
 var TIMESET = 10;
 var SELECTSIZE = 10;
 var timer;
@@ -143,13 +143,16 @@ export default {
       //   }
     },
     select(index) {
-      //   this.input += this.selectRange[index];
-      //   if (this.inputNum < this.input.length) {
-      this.input.splice(this.inputNum, 1, this.selectRange[index]);
-      this.inputNum++;
-      console.log(this.input);
+      let answer = this.list[this.num].answer.split("");
+      if (!this.input[answer.length - 1]) {
+        this.input.splice(this.inputNum, 1, this.selectRange[index]);
+        this.selectRange[index] = "selected";
+      }
+      if (this.inputNum < answer.length - 1) {
+        this.inputNum++;
+      }
+      console.log(this.inputNum);
       //   }
-      this.selectRange[index] = "selected";
       this.checkInput();
     },
     empty() {
@@ -166,16 +169,19 @@ export default {
     },
     hint() {
       let answer = this.list[this.num].answer.split("");
-      this.input.splice(this.inputNum, 1, answer[this.inputNum]);
-
-      for (let i = 0; i < this.selectRange.length; i++) {
-        if (this.selectRange[i] == answer[this.inputNum]) {
-          this.selectRange.splice(i, 1, "selected");
+      if (!this.input[answer.length - 1]) {
+        this.input.splice(this.inputNum, 1, answer[this.inputNum]);
+        for (let i = 0; i < this.selectRange.length; i++) {
+          if (this.selectRange[i] == answer[this.inputNum]) {
+            this.selectRange.splice(i, 1, "selected");
+          }
         }
+        if (this.inputNum < answer.length - 1) {
+          this.inputNum++;
+        }
+        this.checkInput(false);
+        this.score -= 2;
       }
-      this.inputNum++;
-      this.checkInput(false);
-      this.score -= 2;
     },
     timeSet() {
       timer = setInterval(() => {
@@ -189,6 +195,7 @@ export default {
     restart() {
       this.num = 0;
       this.win = false;
+      this.empty();
       this.randomSelect();
       this.time = TIMESET;
       clearInterval(timer);

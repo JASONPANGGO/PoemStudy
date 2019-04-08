@@ -8,9 +8,11 @@ import Daily from '@/components/Daily'
 Vue.use(Router)
 
 export default new Router({
+  linkActiveClass:'',
+  linkExactActiveClass:'selected',
   routes: [
     {
-      path: '/Study',
+      path: '/',
       name: 'Study',
       component: Study,
       meta:{keepAlive:true}

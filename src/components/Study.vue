@@ -157,6 +157,7 @@ export default {
   },
   mounted: function() {
     this.checkscroll();
+    this.changeContent(1);
   },
   methods: {
     checkscroll() {
@@ -243,6 +244,8 @@ export default {
     },
     selectPoem(index) {
       this.num = index;
+      this.studyList = false;
+      this.changeContent(1);
     }
   }
 };

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="headbar">
-      <router-link to="/Study" class="selection" active-class="selected">学习</router-link>
-      <router-link to="/Game" class="selection2" active-class="selected">练习</router-link>
-      <router-link to="/Daily" class="selection3" active-class="selected">每日一句</router-link>
+      <router-link to="/" class="selection" exact-active-class="selected">学习</router-link>
+      <router-link to="/Game" class="selection2" exact-active-class="selected">练习</router-link>
+      <router-link to="/Daily" class="selection3" exact-active-class="selected">每日一句</router-link>
     </div>
   </div>
 </template>

@@ -160,14 +160,14 @@ export default {
   top: 15vh;
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 10px 50px rgb(196, 196, 196);
 }
 .dailyCard {
   /* width: 100%; */
   height: 70vh;
   width: 80vw;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgb(209, 209, 209);
   border-radius: 5px;
   background: url(../assets/pattern4.png) repeat;
   background-size: 80%;

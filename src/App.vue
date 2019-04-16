@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <headBar></headBar>
-    <!-- <transition name="fade"> -->
-    <!-- <keep-alive> -->
+
     <router-view class="routerview"/>
-    <!-- </keep-alive> -->
-    <!-- </transition> -->
+
   </div>
 </template>
 

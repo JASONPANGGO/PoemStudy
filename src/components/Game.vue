@@ -1,36 +1,46 @@
 <template>
   <div class="gameContainer">
-    <div class="gameOver animated" v-if="gameOver" :class="{'fadeIn':gameOver}">
+    <div class="gameOver animated" v-if="gameOver||gameStart" :class="{'fadeIn':gameOver}">
       <div class="gameOverBG animated" :class="{'zoomIn':gameOver}"></div>
       <div class="gameOverBoard animated" :class="{'zoomIn':gameOver}">
-        <div class="title">游戏结束</div>
-        <div class="scoreReport">你的得分：{{score}}</div>
-        <button @click="restart">重新开始</button>
+        <div class="title" v-if="gameOver">游戏结束</div>
+        <div class="title" v-if="gameStart">背诵游戏</div>
+        <div class="scoreReport" v-if="gameOver">你的得分：{{score}}</div>
+        <div class="scoreReport" v-if="gameStart">游戏规则：在10秒内回答正确对应诗句的下一句即可得分</div>
+        <button @click="restart" v-if="gameOver">重新开始</button>
+        <button @click="restart" v-if="gameStart">开始游戏</button>
       </div>
     </div>
+    <!-- 游戏标题栏 -->
     <div class="gameBoard">
       <div class="gameBar">
+        <!-- 当前诗歌名字 -->
         <span class="title">{{list[num].title}}</span>
         <div class="time">
+          <!-- 时间 -->
           <img src="../assets/time.png" alt>
           <span class="barDigit">{{time}}</span>
         </div>
         <div class="score">
+          <!-- 得分 -->
           <span class="barDigit">{{score}}</span>
           <img src="../assets/coins.png" alt>
         </div>
       </div>
+      <!-- 当前诗词图片 -->
       <div class="gameImg" :class="{gameWin: win}">
         <img :src="list[num].img">
         <!-- <img src="/static/img/yeyujibei.b4630aa.jpg"> -->
       </div>
-
+      <!-- 游戏主体 -->
       <div class="gameMain">
+        <!-- 问题 -->
         <div class="gameQuestion">{{list[num].question}}，</div>
+        <!-- 选择后的答案 -->
         <div class="gameInputBox">
           <div class="gameInput" v-for="(item, index) in input" :key="index">{{item}}</div>
         </div>
-
+        <!-- 答案选择 -->
         <div class="gameSelection">
           <div
             class="gameSelectBox"
@@ -89,7 +99,8 @@ export default {
       imgUrl: "../assets/yeyujibei.jpg",
       time: TIMESET,
       score: 0,
-      gameOver: false
+      gameOver: false,
+      gameStart: true
     };
   },
   methods: {
@@ -114,8 +125,10 @@ export default {
         }, 1000);
       }
     },
+    // 生成答案选择的随机序列
     randomSelect(e = true) {
       let range = [];
+      // 获取正确答案的字符
       let answer = this.list[this.num].answer.split("");
       if (e) {
         this.input = [];
@@ -135,13 +148,9 @@ export default {
         range[j] = range[range.length - 1];
         range[range.length - 1] = temp;
       }
-      console.log(range);
       this.selectRange = range;
-
-      //   for(let i =0;i<answer.length;i++){
-      //       this.input.push('');
-      //   }
     },
+    // 选择答案
     select(index) {
       let answer = this.list[this.num].answer.split("");
       if (!this.input[answer.length - 1]) {
@@ -202,11 +211,12 @@ export default {
       this.timeSet();
       this.score = 0;
       this.gameOver = false;
+      this.gameStart = false;
     }
   },
   mounted: function() {
     this.randomSelect();
-    this.timeSet();
+    // this.timeSet();
   }
 };
 </script>
@@ -376,6 +386,7 @@ export default {
 }
 .gameOver .gameOverBoard .scoreReport {
   margin-top: 3vh;
+  width: 80%;
 }
 .gameOver .gameOverBoard {
   background: url(../assets/pattern4.png) repeat;

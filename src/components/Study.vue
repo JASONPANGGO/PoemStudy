@@ -109,8 +109,11 @@ import libai from "../assets/libai.jpg";
 import jingyesi from "../assets/jingyesi.jpg";
 import menghaoran from "../assets/menghaoran.jpg";
 import chunxiao from "../assets/chunxiao.jpg";
+import VueEvent from "../model/vueEvent";
+
+import axios from "axios";
+
 var studyItemHeight = window.innerHeight * 0.9;
-var longtaptime;
 export default {
   name: "Study",
   data() {
@@ -150,87 +153,150 @@ export default {
           writer: "李商隐"
         }
       ],
+      // poems:[{
+      //     finishState: false,
+      //     title: "静夜思",
+      //     img: jingyesi,
+      //     writer: "李白",
+      //     writerImg: libai,
+      //     writerDynasty: "唐",
+      //     content: "床前明月光，疑是地上霜。举头望明月，低头思故乡。",
+      //     writerStory:
+      //       "李白（701年－762年） ，字太白，号青莲居士，又号“谪仙人”，是唐代伟大的浪漫主义诗人，被后人誉为“诗仙”，与杜甫并称为“李杜”，为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”。据《新唐书》记载，李白为兴圣皇帝（凉武昭王李暠）九世孙，与李唐诸王同宗。其人爽朗大方，爱饮酒作诗，喜交友。",
+      //     comments:
+      //       "<span class='green'>床</span>前明月光，<br>明亮的月光洒在床前的窗户纸上，<br><span class='green'>疑</span>是地上霜。<br>好像地上泛起了一层霜。<br>举头望明月，<br>我禁不住抬起头来，<br>看那天窗外空中的一轮明月，<br>低头思故乡。<br>不由得低头沉思，<br>想起远方的家乡。",
+      //     comments2:
+      //       " （1）<b>静夜思</b>：安静的夜晚产生的思绪。<br>（2）<b>床</b>：此诗中的“床”字，是争论和异议的焦点。<br>（3）<b>疑</b>：好像。",
+      //     appreciation:
+      //       "<p>这首诗写的是在寂静的月夜思念家乡的感受。</p><p>诗的前两句，是写诗人在作客他乡的特定环境中一刹那间所产生的错觉。</p><p>一个独处他乡的人，白天奔波忙碌，倒还能冲淡离愁，然而一到夜深人静的时候，心头就难免泛起阵阵思念故乡的波澜。</p><p>何况是在月明之夜，更何况是月色如霜的秋夜。</p><p>“疑是地上霜”中的“疑”字，生动地表达了诗人睡梦初醒，迷离恍惚中将照射在床前的清冷月光误作铺在地面的浓霜。</p><p>而“霜”字用得更妙，既形容了月光的皎洁，又表达了季节的寒冷，还烘托出诗人飘泊他乡的孤寂凄凉之情。</p><p>诗的后两句，则是通过动作神态的刻画，深化思乡之情。</p><p>“望”字照应了前句的“疑”字，表明诗人已从迷朦转为清醒，他翘首凝望着月亮，不禁想起，此刻他的故乡也正处在这轮明月的照耀下。</p>"
+      //   }],
       num: 0,
       nowContent: 1,
-      studyList: false
+      studyList: false,
+      nowGrade: "一年级上册"
     };
   },
-  mounted: function() {
+  created() {
+    // VueEvent.$on("sendGrade", e => {
+    //   this.nowGrade = e;
+    //   console.log("$on:", this);
+    // });
+    //   axios
+    //     .get("https://fl123.xyz/api/poetry/getPoList.php", {
+    //       params: {
+    //         library: this.nowGrade
+    //       }
+    //     })
+    //     .then(response => {
+    //       this.poems = response.data;
+    //       console.log("axios:", this);
+    //     });
+  },
+  beforeMount() {
+    this.onGradeChange();
+
     this.checkscroll();
     this.changeContent(1);
   },
+  mounted() {
+    // this.onGradeChange();
+    console.log(this)
+    this.setGrade();
+    // this.$forceUpdate()
+  },
+  beforeUpdate() {
+    // console.log("beforeUpdate");
+  },
+  updated() {
+    // console.log("Updated");
+  },
+  destroyed: function() {
+    window.removeEventListener("touchstart", this.startScroll, false);
+    window.removeEventListener("touchmove", this.moveScroll, false);
+    window.removeEventListener("touchend", this.endScroll, false);
+    console.log("destroyed");
+    this.$destroy(true);
+    // window.removeEventListener("touchend");
+  },
   methods: {
+    onGradeChange() {
+      VueEvent.$on("sendGrade", e => {
+        this.nowGrade = e;
+        this.setGrade();
+        console.log("setGrade:", this.nowGrade);
+      });
+    },
+    setGrade() {
+      let that = this;
+      console.log("setGrade():", this.nowGrade);
+      // this.$nextTick(()=>{
+      axios
+        .get("https://fl123.xyz/api/poetry/getPoList.php", {
+          params: {
+            library: this.nowGrade
+          }
+        })
+        .then(response => {
+          that.poems = response.data;
+          console.log(this)
+          // console.log(response.data);
+          // console.log(this.nowGrade);
+        });
+      // });
+    },
     checkscroll() {
       let startY, endY;
       let direction;
       let distance;
-
       let that = this;
-      window.addEventListener(
-        "touchstart",
-        function(e) {
-          // console.log(e.touches[0].clientX);
-          // var startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-          // console.log(startY);
-        },
-        false
-      );
-      window.addEventListener(
-        "touchmove",
-        function(e) {
-          e.preventDefault();
-          // console.log(e.touches[0].clientX);
-          // var endX = e.touches[0].clientX;
-          endY = e.touches[0].clientY;
-          // console.log(endY);
-          distance = endY - startY;
-        },
-        { passive: false }
-      );
-      window.addEventListener(
-        "touchend",
-        function() {
-          if (distance > 50) {
-            // 向上翻页
-            console.log("向上翻页");
-            if (
-              Math.abs(document.documentElement.scrollTop - studyItemHeight) < 1
-            ) {
-              that.changeContent(1);
-            } else if (
-              Math.abs(
-                document.documentElement.scrollTop - studyItemHeight * 2
-              ) < 1
-            ) {
-              that.changeContent(2);
-            } else if (
-              Math.abs(
-                document.documentElement.scrollTop - studyItemHeight * 3
-              ) < 1
-            ) {
-              that.changeContent(3);
-            }
-          } else if (distance < -50) {
-            // 向下翻页
-            console.log("向下翻页");
-            if (Math.abs(document.documentElement.scrollTop - 0) < 1) {
-              that.changeContent(2);
-            } else if (
-              Math.abs(document.documentElement.scrollTop - studyItemHeight) < 1
-            ) {
-              that.changeContent(3);
-            } else if (
-              Math.abs(
-                document.documentElement.scrollTop - studyItemHeight * 2
-              ) < 1
-            ) {
-              that.changeContent(4);
-            }
+
+      this.startScroll = function(e) {
+        startY = e.touches[0].clientY;
+      };
+      this.moveScroll = function(e) {
+        e.preventDefault();
+        endY = e.touches[0].clientY;
+        distance = endY - startY;
+      };
+      this.endScroll = function() {
+        if (distance > 50) {
+          // 向上翻页
+          console.log("向上翻页");
+          if (
+            Math.abs(document.documentElement.scrollTop - studyItemHeight) < 1
+          ) {
+            that.changeContent(1);
+          } else if (
+            Math.abs(document.documentElement.scrollTop - studyItemHeight * 2) <
+            1
+          ) {
+            that.changeContent(2);
+          } else if (
+            Math.abs(document.documentElement.scrollTop - studyItemHeight * 3) <
+            1
+          ) {
+            that.changeContent(3);
           }
-        },
-        false
-      );
+        } else if (distance < -50) {
+          // 向下翻页
+          console.log("向下翻页");
+          if (Math.abs(document.documentElement.scrollTop - 0) < 1) {
+            that.changeContent(2);
+          } else if (
+            Math.abs(document.documentElement.scrollTop - studyItemHeight) < 1
+          ) {
+            that.changeContent(3);
+          } else if (
+            Math.abs(document.documentElement.scrollTop - studyItemHeight * 2) <
+            1
+          ) {
+            that.changeContent(4);
+          }
+        }
+      };
+      window.addEventListener("touchstart", this.startScroll, false);
+      window.addEventListener("touchmove", this.moveScroll, { passive: false });
+      window.addEventListener("touchend", this.endScroll, false);
     },
     changeContent(e) {
       this.nowContent = e;

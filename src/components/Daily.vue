@@ -92,6 +92,11 @@ export default {
     // this.nowPoem = this.dailyPoem.length;
     // console.log(this.nowPoem)
   },
+  destroyed: function(){
+    window.removeEventListener("touchstart", this.swipeStart)
+    window.removeEventListener("touchmove", this.swipeMove)
+    window.removeEventListener("touchend", this.swipeEnd)
+  },
   methods: {
     swipeToNext(nowPoem) {
       let startX, endX;
@@ -99,19 +104,15 @@ export default {
       let distance;
       nowPoem = this.nowPoem;
 
-      window.addEventListener("touchstart", e => {
+      this.swipeStart = (e)=> {
         startX = e.touches[0].clientX;
-      });
-      window.addEventListener(
-        "touchmove",
-        e => {
-          e.preventDefault();
-          endX = e.touches[0].clientX;
-          distance = endX - startX;
-        },
-        { passive: false }
-      );
-      window.addEventListener("touchend", () => {
+      };
+      this.swipeMove = (e)=> {
+        e.preventDefault();
+        endX = e.touches[0].clientX;
+        distance = endX - startX;
+      };
+      this.swipeEnd = ()=>{
         if (distance > 5) {
           console.log("右");
           if (nowPoem > 0) {
@@ -129,9 +130,14 @@ export default {
             this.noPoemMsg();
           }
         }
+      }
+
+      window.addEventListener("touchstart", this.swipeStart);
+      window.addEventListener("touchmove", this.swipeMove, {
+        passive: false
       });
-      //  this.dailyPoem[index].display = false;
-      //  this.dailyPoem[index-1].display = true;
+      window.addEventListener("touchend", this.swipeEnd);
+
     },
     noPoemMsg() {
       this.promptNoPoem = true;
@@ -237,7 +243,7 @@ export default {
   width: 120px;
   font-size: 12px;
   color: gray;
-  bottom: 10px;
+  bottom: 10vh;
   left: 0;
   right: 0;
   margin: 0 auto;

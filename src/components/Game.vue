@@ -355,7 +355,8 @@ export default {
 .gameOver {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  top: 8vh;
+  height: 92vh;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 100;
   display: flex;

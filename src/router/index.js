@@ -4,7 +4,6 @@ import Router from 'vue-router'
 import Study from '@/components/Study'
 import Game from '@/components/Game'
 import Daily from '@/components/Daily'
-import Repo from '@/components/Repo'
 
 Vue.use(Router)
 
@@ -29,10 +28,5 @@ export default new Router({
       component: Daily,
       meta:{keepAlive:true} 
     },
-    {
-      path: '/Repo',
-      name: 'Repo',
-      component: Repo,
-    }
   ]
 })

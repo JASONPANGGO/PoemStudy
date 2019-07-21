@@ -3,9 +3,9 @@
     <div class="poemRepo" @click="toggleRepo">{{nowGrade}}</div>
     <div class="Repo" v-if="repo">
       <div class="item" v-for="(item, index) in grades" :key="index" @click="changeGrade(index)">
-        <img src="../assets/cloud1.png" alt>
+        <img src="../assets/cloud1.png" alt />
         {{item.name}}
-        <img src="../assets/cloud2.png" alt>
+        <img src="../assets/cloud2.png" alt />
       </div>
     </div>
     <div class="operation">
@@ -32,10 +32,42 @@
         :class="{'fadeIn' : nowContent === 1, 'fadeOut': nowContent != 1}"
       >
         <div class="headimg">
-          <img :src="poems[num].img" alt>
+          <img :src="poems[num].img" alt />
         </div>
 
         <div class="title">{{poems[num].title}}</div>
+        <svg
+          @click="playAudio()"
+          t="1563687280320"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="4348"
+          width="30"
+          height="30"
+        >
+          <path
+            d="M764.74368 769.37216c5.40672 0 10.77248-2.12992 14.82752-6.3488 58.40896-61.17376 91.89376-150.15936 91.89376-244.16256 0-93.98272-33.50528-182.96832-91.87328-244.14208-7.80288-8.17152-20.80768-8.47872-28.95872-0.67584-8.17152 7.82336-8.47872 20.7872-0.67584 28.95872 51.2 53.63712 80.56832 132.32128 80.56832 215.8592 0 83.5584-29.36832 162.24256-80.5888 215.87968-7.80288 8.17152-7.49568 21.13536 0.67584 28.95872C754.56512 767.50848 759.66464 769.37216 764.74368 769.37216z"
+            p-id="4349"
+            fill="#515151"
+          />
+          <path
+            d="M696.64768 706.19136c5.16096 0 10.32192-1.9456 14.29504-5.81632 45.568-44.48256 71.70048-110.61248 71.70048-181.47328 0-70.88128-26.13248-137.0112-71.70048-181.49376-8.0896-7.8848-21.03296-7.74144-28.95872 0.36864-7.90528 8.11008-7.74144 21.05344 0.36864 28.95872 37.70368 36.80256 59.33056 92.28288 59.33056 152.18688s-21.64736 115.36384-59.33056 152.1664c-8.11008 7.90528-8.25344 20.86912-0.36864 28.95872C685.99808 704.14336 691.32288 706.19136 696.64768 706.19136z"
+            p-id="4350"
+            fill="#515151"
+          />
+          <path
+            d="M616.12032 605.61408c-8.68352 7.24992-9.80992 20.1728-2.58048 28.85632 4.05504 4.83328 9.87136 7.33184 15.74912 7.33184 4.62848 0 9.27744-1.55648 13.12768-4.75136 32.19456-26.91072 51.42528-71.10656 51.42528-118.1696 0-47.77984-19.68128-92.32384-52.6336-119.1936-8.76544-7.168-21.66784-5.77536-28.81536 2.94912-7.14752 8.76544-5.81632 21.66784 2.94912 28.81536 23.51104 19.16928 37.56032 51.85536 37.56032 87.4496C652.86144 553.984 639.11936 586.40384 616.12032 605.61408z"
+            p-id="4351"
+            fill="#515151"
+          />
+          <path
+            d="M492.1344 256.73728l-167.99744 125.62432-87.552 0c-11.32544 0-20.48 9.15456-20.48 20.48l0 232.12032c0 11.32544 9.15456 20.48 20.48 20.48l87.552 0 167.99744 125.62432c3.60448 2.70336 7.92576 4.07552 12.26752 4.07552 3.11296 0 6.28736-0.7168 9.17504-2.1504 6.92224-3.4816 11.30496-10.56768 11.30496-18.3296l0-491.52c0-7.76192-4.38272-14.848-11.30496-18.3296C506.65472 251.392 498.31936 252.1088 492.1344 256.73728zM483.92192 723.78368l-140.6976-105.22624c-3.54304-2.64192-7.84384-4.07552-12.26752-4.07552l-73.89184 0L257.06496 423.3216l73.89184 0c4.42368 0 8.72448-1.4336 12.26752-4.07552l140.6976-105.22624L483.92192 723.78368z"
+            p-id="4352"
+            fill="#515151"
+          />
+        </svg>
         <div class="writer">{{poems[num].writer}}</div>
         <div class="content" v-html="poems[num].content"></div>
       </div>
@@ -47,10 +79,10 @@
         <div class="title">{{poems[num].title}}</div>
         <div class="writer">{{poems[num].writer}}</div>
         <div class="content" v-html="poems[num].comments"></div>
-        <br>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
+        <br />
         <div class="content-comment" v-html="poems[num].comments2"></div>
       </div>
 
@@ -71,7 +103,7 @@
             <div class="dynasty">[ {{poems[num].writerDynasty}} ]</div>
           </div>
           <div class="writerimg">
-            <img :src="poems[num].writerImg" alt>
+            <img :src="poems[num].writerImg" alt />
           </div>
         </div>
         <div class="story">{{poems[num].writerStory}}</div>
@@ -79,7 +111,7 @@
           <!-- <div class="finishDo"> -->
           <button :class="{'finished': poems[num].finishState}" @click="clickFinish">完成学习</button>
           <div class="catalogue" @click="openList(true)">
-            <img src="../assets/menu.png" alt>
+            <img src="../assets/menu.png" alt />
           </div>
           <!-- </div> -->
         </div>
@@ -109,6 +141,7 @@
         </div>
       </div>
     </div>
+    <audio :src="audioSrc" />
   </div>
 </template>
 
@@ -184,7 +217,8 @@ export default {
         { name: "九年级上册" },
         { name: "九年级下册" }
       ],
-      repo: false
+      repo: false,
+      audioSrc: ""
     };
   },
   beforeMount() {
@@ -196,7 +230,14 @@ export default {
     console.log("destroyed");
   },
   mounted() {
-    this.changeGrade(0);
+    // this.changeGrade(0);
+
+    if (location.toString().match(/\?/)) {
+      this.searchPoem(this.$route.query);
+      console.log(this.$route.query);
+    } else {
+      this.changeGrade(0);
+    }
   },
   methods: {
     toggleSwipe(e) {
@@ -337,6 +378,35 @@ export default {
         });
       this.changeContent(1);
       this.toggleSwipe(true);
+    },
+    searchPoem(poem) {
+      let nowPoem = poem;
+      axios
+        .get("https://fl123.xyz/api/poetry/getPoetry.php", {
+          params: {
+            poetryName: nowPoem.title,
+            poemName: nowPoem.writer
+          }
+        })
+        .then(response => {
+          this.poems.splice(0, 1, response.data);
+          let tempString;
+          if (this.poems[0].content.length > 32) {
+            tempString = this.poems[0].content.replace(/。/g, "。<br/>");
+          } else {
+            tempString = this.poems[0].content
+              .replace(/，/g, "，<br/>")
+              .replace(/。/g, "。<br/>");
+          }
+          this.poems[0].content = tempString;
+          this.nowGrade = response.data.grade;
+        });
+    },
+    playAudio() {
+      let content = this.poems[0].content;
+      content = content.replace(/<br\/>/g, "");
+      this.audioSrc = `http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=${content}`;
+      document.querySelector("audio").play();
     }
   }
 };
@@ -651,6 +721,15 @@ body::-webkit-scrollbar {
   width: 4vh;
   height: 4vh;
 }
+.Repo .item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: 0.5s;
+}
+/* @keyframes repoSelect {
+  0%{
+
+  }
+} */
 .poemRepo {
   position: fixed;
   z-index: 1000;
@@ -669,5 +748,15 @@ body::-webkit-scrollbar {
   margin-top: 1px;
   width: 1em;
   height: 1em;
+}
+
+.test {
+  position: fixed;
+  width: 100vw;
+  height: 50vw;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  font-size: 20px;
+  color: white;
 }
 </style>

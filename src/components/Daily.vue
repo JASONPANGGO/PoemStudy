@@ -29,6 +29,7 @@
 
 <script>
 import stamp from "../assets/stamp.png";
+import axios from "axios";
 let prompting = false;
 export default {
   name: "Daily",
@@ -75,7 +76,7 @@ export default {
         },
         {
           title: "望月怀远",
-          stampHeight: "120px",
+          stampHeight: "150px",
           poem: "海上生明月，<br>天涯共此时。",
           writer: "张九龄",
           dynasty: "唐",
@@ -88,31 +89,35 @@ export default {
     };
   },
   mounted: function() {
-    this.swipeToNext();
-    // this.nowPoem = this.dailyPoem.length;
-    // console.log(this.nowPoem)
+    axios.get("https://fl123.xyz/api/poetry/getDaily.php").then(response => {
+      for(let i =0;i<response.data.length;i++){
+        response.data[i].poem = response.data[i].poem.replace(/\，/,"，<br/>").replace(/\。/,"。<br/>");
+      }
+      this.dailyPoem = response.data;
+      this.nowPoem = this.dailyPoem.length - 1;
+      this.swipeToNext();
+    });
   },
-  destroyed: function(){
-    window.removeEventListener("touchstart", this.swipeStart)
-    window.removeEventListener("touchmove", this.swipeMove)
-    window.removeEventListener("touchend", this.swipeEnd)
+  destroyed: function() {
+    window.removeEventListener("touchstart", this.swipeStart);
+    window.removeEventListener("touchmove", this.swipeMove);
+    window.removeEventListener("touchend", this.swipeEnd);
   },
   methods: {
-    swipeToNext(nowPoem) {
+    swipeToNext() {
       let startX, endX;
       let direction;
       let distance;
-      nowPoem = this.nowPoem;
-
-      this.swipeStart = (e)=> {
+      let nowPoem = this.nowPoem;
+      this.swipeStart = e => {
         startX = e.touches[0].clientX;
       };
-      this.swipeMove = (e)=> {
+      this.swipeMove = e => {
         e.preventDefault();
         endX = e.touches[0].clientX;
         distance = endX - startX;
       };
-      this.swipeEnd = ()=>{
+      this.swipeEnd = () => {
         if (distance > 5) {
           console.log("右");
           if (nowPoem > 0) {
@@ -130,14 +135,13 @@ export default {
             this.noPoemMsg();
           }
         }
-      }
+      };
 
       window.addEventListener("touchstart", this.swipeStart);
       window.addEventListener("touchmove", this.swipeMove, {
         passive: false
       });
       window.addEventListener("touchend", this.swipeEnd);
-
     },
     noPoemMsg() {
       this.promptNoPoem = true;
@@ -197,7 +201,7 @@ export default {
   height: 120px;
   margin-top: 20px;
   background: url(../assets/stamp.png);
-  background-size: 40px 120px;
+  background-size: 40px 100%;
   float: right;
   margin-right: 20px;
   color: white;

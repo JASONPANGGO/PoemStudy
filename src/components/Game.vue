@@ -64,7 +64,8 @@
 import jingyesi from "../assets/jingyesi.jpg";
 import chunxiao from "../assets/chunxiao.jpg";
 import yeyujibei from "../assets/yeyujibei.jpg";
-var TIMESET = 10;
+import axios from "axios";
+var TIMESET = 15;
 var SELECTSIZE = 10;
 var timer;
 export default {
@@ -90,6 +91,27 @@ export default {
           question: "君问归期未有期",
           answer: "巴山夜雨涨秋池",
           img: yeyujibei
+        },
+        {
+          title: "一去二三里",
+          question: "一去二三里",
+          answer: "烟村四五家",
+          img:
+            "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1130048677,3733522986&fm=26&gp=0.jpg"
+        },
+        {
+          title: "咏鹅",
+          question: "白毛浮绿水",
+          answer: "红掌拨清波",
+          img:
+            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1133844638,3282053026&fm=26&gp=0.jpg"
+        },
+        {
+          title: "画",
+          question: "远看山有色",
+          answer: "近看水无声",
+          img:
+            "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2831505305,939318129&fm=26&gp=0.jpg"
         }
       ],
       selectRange: [],
@@ -202,6 +224,13 @@ export default {
       }, 1000);
     },
     restart() {
+      // 打乱诗词顺序，洗牌算法
+      for (let i = 0; i < this.list.length; i++) {
+        let j = Math.floor(Math.random() * (this.list.length - 1));
+        let temp = this.list[j];
+        this.list[j] = this.list[this.list.length - 1];
+        this.list[this.list.length - 1] = temp;
+      }
       this.num = 0;
       this.win = false;
       this.empty();
@@ -215,8 +244,18 @@ export default {
     }
   },
   mounted: function() {
-    this.randomSelect();
-    // this.timeSet();
+    axios.get("https://fl123.xyz/api/poetry/getTest.php").then(response => {
+      console.log(response);
+      this.list = response.data;
+      // 打乱诗词顺序，洗牌算法
+      for (let i = 0; i < this.list.length; i++) {
+        let j = Math.floor(Math.random() * (this.list.length - 1));
+        let temp = this.list[j];
+        this.list[j] = this.list[this.list.length - 1];
+        this.list[this.list.length - 1] = temp;
+      }
+      this.randomSelect();
+    });
   }
 };
 </script>

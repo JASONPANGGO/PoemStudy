@@ -39,7 +39,8 @@
         <svg
           @click="playAudio()"
           t="1563687280320"
-          class="icon"
+          class="icon animated "
+          :class="{heartBeat: audioPlaying}"
           viewBox="0 0 1024 1024"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +142,7 @@
         </div>
       </div>
     </div>
-    <audio :src="audioSrc" />
+    <audio :src="audioSrc" ref="audio" />
   </div>
 </template>
 
@@ -218,7 +219,8 @@ export default {
         { name: "九年级下册" }
       ],
       repo: false,
-      audioSrc: ""
+      audioSrc: "",
+      audioPlaying: false
     };
   },
   beforeMount() {
@@ -403,10 +405,24 @@ export default {
         });
     },
     playAudio() {
-      let content = this.poems[0].content;
-      content = content.replace(/<br\/>/g, "");
-      this.audioSrc = `http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=${content}`;
-      document.querySelector("audio").play();
+
+      let audio = this.$refs.audio;
+
+      window.addEventListener("ended",()=>{
+        this.audioPlaying = false
+      })
+
+      if(this.audioPlaying){
+        this.audioPlaying = false;
+        audio.pause()
+      }else{
+        let content = this.poems[this.num].content;
+        content = content.replace(/<br\/>/g, "");
+        this.audioSrc = `http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text=${content}`;
+        // document.querySelector("audio").play();
+        audio.play()
+        this.audioPlaying = true;
+      }
     }
   }
 };
@@ -421,7 +437,6 @@ export default {
   width: 40px;
   height: 60vh;
   top: 40vh;
-  /* background-color: blueviolet; */
 }
 .study-selection {
   margin: 0;
@@ -434,7 +449,6 @@ export default {
   letter-spacing: 3px;
   text-align: center;
   transition: 0.5s ease;
-  /* background-color: blue; */
 }
 .selectThis {
   border-left: 1vw solid rgb(0, 106, 82);
@@ -758,5 +772,8 @@ body::-webkit-scrollbar {
   z-index: 1000;
   font-size: 20px;
   color: white;
+}
+.playing{
+  color: rgb(0, 106, 82);
 }
 </style>
